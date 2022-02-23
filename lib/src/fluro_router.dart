@@ -37,18 +37,25 @@ class FluroRouter {
   static const defaultTransitionDuration = Duration(milliseconds: 250);
 
   /// Creates a [PageRoute] definition for the passed [RouteHandler]. You can optionally provide a default transition type.
-  void define(String routePath,
-      {required Handler? handler,
-      TransitionType? transitionType,
-      Duration transitionDuration = defaultTransitionDuration,
-      RouteTransitionsBuilder? transitionBuilder,
-      bool? opaque}) {
+  void define(
+    String routePath, {
+    required Handler? handler,
+    TransitionType? transitionType,
+    Duration transitionDuration = defaultTransitionDuration,
+    RouteTransitionsBuilder? transitionBuilder,
+    bool? opaque,
+    RouteMiddleware? routeMiddleware,
+  }) {
     _routeTree.addRoute(
-      AppRoute(routePath, handler,
-          transitionType: transitionType,
-          transitionDuration: transitionDuration,
-          transitionBuilder: transitionBuilder,
-          opaque: opaque),
+      AppRoute(
+        routePath,
+        handler,
+        transitionType: transitionType,
+        transitionDuration: transitionDuration,
+        transitionBuilder: transitionBuilder,
+        opaque: opaque,
+        routeMiddleware: routeMiddleware,
+      ),
     );
   }
 
@@ -261,6 +268,13 @@ class FluroRouter {
         );
       }
     };
+
+    if (route!.routeMiddleware != null) {
+      return RouteMatch(
+        matchType: RouteMatchType.visual,
+        route: creator(route.routeMiddleware!.redirect(path)!, parameters),
+      );
+    }
 
     return RouteMatch(
       matchType: RouteMatchType.visual,

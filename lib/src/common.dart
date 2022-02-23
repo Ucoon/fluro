@@ -41,6 +41,13 @@ typedef Widget? HandlerFunc(
   Map<String, List<String>> parameters,
 );
 
+///定义拦截器
+///路由中间件
+abstract class RouteMiddleware {
+  int? priority;
+  RouteSettings? redirect(String route);
+}
+
 /// A route that is added to the router tree.
 class AppRoute {
   AppRoute(
@@ -50,6 +57,7 @@ class AppRoute {
     this.transitionDuration,
     this.transitionBuilder,
     this.opaque,
+    this.routeMiddleware,
   });
 
   String route;
@@ -58,6 +66,7 @@ class AppRoute {
   Duration? transitionDuration;
   RouteTransitionsBuilder? transitionBuilder;
   bool? opaque;
+  RouteMiddleware? routeMiddleware;
 }
 
 /// The type of transition to use when pushing/popping a route.
