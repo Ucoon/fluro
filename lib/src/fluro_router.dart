@@ -167,6 +167,16 @@ class FluroRouter {
     AppRouteMatch? match = _routeTree.matchRoute(path!);
     AppRoute? route = match?.route;
 
+    if (route!.routeMiddleware != null) {
+      RouteSettings? redirectSettings = route.routeMiddleware!.redirect(path);
+      if (redirectSettings != null) {
+        settingsToUse = redirectSettings;
+        path = settingsToUse.name;
+        match = _routeTree.matchRoute(path!);
+        route = match?.route;
+      }
+    }
+
     if (transitionDuration == null && route?.transitionDuration != null) {
       transitionDuration = route?.transitionDuration;
     }
@@ -268,13 +278,6 @@ class FluroRouter {
         );
       }
     };
-
-    if (route!.routeMiddleware != null) {
-      return RouteMatch(
-        matchType: RouteMatchType.visual,
-        route: creator(route.routeMiddleware!.redirect(path)!, parameters),
-      );
-    }
 
     return RouteMatch(
       matchType: RouteMatchType.visual,
