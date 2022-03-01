@@ -6,11 +6,10 @@
  * Copyright (c) 2019 Yakka, LLC. All rights reserved.
  * See LICENSE for distribution and usage details.
  */
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/application.dart';
-import '../../config/routes.dart';
+import '../../config/routers.dart';
 
 class AppComponent extends StatefulWidget {
   @override
@@ -21,9 +20,7 @@ class AppComponent extends StatefulWidget {
 
 class AppComponentState extends State<AppComponent> {
   AppComponentState() {
-    final router = FluroRouter();
-    Routes.configureRoutes(router);
-    Application.router = router;
+    Application.setupRoutes(Routers());
   }
 
   @override

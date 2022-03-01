@@ -7,12 +7,11 @@
  * See LICENSE for distribution and usage details.
  */
 import 'dart:async';
-
 import 'package:fluro/fluro.dart';
+import 'package:fluro_example/config/application.dart';
+import 'package:fluro_example/config/routers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../config/application.dart';
 
 class HomeComponent extends StatefulWidget {
   @override
@@ -210,19 +209,37 @@ class HomeComponentState extends State<HomeComponent> {
         result = "Today is ${_daysOfWeek[DateTime.now().weekday - 1]}!";
       }
 
-      String route = "/demo?message=$message&color_hex=$hexCode";
-
+      Bundle bundle = Bundle();
+      bundle.putString('message', message);
+      bundle.putString('colorHex', hexCode);
       if (result != null) {
-        route = "$route&result=$result";
+        bundle.putString('result', result);
       }
-
-      Application.router
-          .navigateTo(context, route, transition: transitionType)
-          .then((result) {
-        if (key == "pop-result") {
-          Application.router.navigateTo(context, "/demo/func?message=$result");
-        }
-      });
+      FluroPlusNavigate.gotoWithResult(
+        context,
+        Application.router,
+        Routers.demoSimple,
+        bundle: bundle,
+        function: (value) {
+          if (key == "pop-result") {
+            Bundle bundle = Bundle();
+            bundle.putString('message', value);
+            FluroPlusNavigate.goto(
+              context,
+              Application.router,
+              Routers.demoFunc,
+              bundle: bundle,
+            );
+          }
+        },
+      );
+      FluroPlusNavigate.goto(
+        context,
+        Application.router,
+        Routers.demoSimple,
+        bundle: bundle,
+        transition: transitionType,
+      );
     } else if (key == "custom") {
       hexCode = "#DFF700";
       message =
@@ -237,19 +254,38 @@ class HomeComponentState extends State<HomeComponent> {
           ),
         );
       };
-      Application.router.navigateTo(
+      Bundle bundle = Bundle();
+      bundle.putString('message', '$message');
+      bundle.putString('colorHex', '$hexCode');
+      FluroPlusNavigate.goto(
         context,
-        "/demo?message=$message&color_hex=$hexCode",
+        Application.router,
+        Routers.demoSimpleFixedTrans,
+        bundle: bundle,
         transition: TransitionType.custom,
         transitionBuilder: transition,
         transitionDuration: const Duration(milliseconds: 600),
       );
     } else if (key == "fixed-trans") {
-      Application.router.navigateTo(
-          context, "/demo/fixedtrans?message=Hello!&color_hex=#f4424b");
+      Bundle bundle = Bundle();
+      bundle.putString('message', 'Hello!');
+      bundle.putString('colorHex', '#f4424b');
+      FluroPlusNavigate.goto(
+        context,
+        Application.router,
+        Routers.demoSimpleFixedTrans,
+        bundle: bundle,
+      );
     } else {
       message = "You tapped the function button!";
-      Application.router.navigateTo(context, "/demo/func?message=$message");
+      Bundle bundle = Bundle();
+      bundle.putString('message', message);
+      FluroPlusNavigate.goto(
+        context,
+        Application.router,
+        Routers.demoFunc,
+        bundle: bundle,
+      );
     }
   }
 }

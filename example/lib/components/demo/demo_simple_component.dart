@@ -11,17 +11,22 @@ import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
 class DemoSimpleComponent extends StatelessWidget {
-  DemoSimpleComponent(
-      {String message = "Testing",
-      Color color = const Color(0xFFFFFFFF),
-      String? result})
-      : this.message = message,
-        this.color = color,
-        this.result = result;
-
-  final String message;
-  final Color color;
-  final String? result;
+  final Bundle bundle;
+  DemoSimpleComponent(this.bundle) {
+    this.message = bundle.getString('message');
+    Color color = Color(0xFFFFFFFF);
+    String colorHex = bundle.getString('colorHex');
+    if (colorHex.length > 0) {
+      color = Color(ColorHelpers.fromHexString(colorHex));
+    }
+    this.color = color;
+    if (bundle.containsKey('result')) {
+      this.result = bundle.getString('result');
+    }
+  }
+  late String message;
+  late Color color;
+  String? result;
 
   @override
   Widget build(BuildContext context) {
