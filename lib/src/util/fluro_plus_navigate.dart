@@ -14,6 +14,9 @@ class FluroPlusNavigate {
     bool replace = false,
     bool clearStack = false,
     TransitionType transition = TransitionType.inFromRight,
+    Duration? transitionDuration,
+    RouteTransitionsBuilder? transitionBuilder,
+    bool? opaque,
   }) {
     debugPrint('FluroPlusNavigate.goto $path?arguments=${bundle?.toJson()}');
     FocusScope.of(context).requestFocus(FocusNode());
@@ -23,6 +26,9 @@ class FluroPlusNavigate {
       replace: replace,
       clearStack: clearStack,
       transition: transition,
+      transitionDuration: transitionDuration,
+      transitionBuilder: transitionBuilder,
+      opaque: opaque,
     );
   }
 
@@ -36,6 +42,9 @@ class FluroPlusNavigate {
     bool replace = false,
     bool clearStack = false,
     TransitionType transition: TransitionType.inFromRight,
+    Duration? transitionDuration,
+    RouteTransitionsBuilder? transitionBuilder,
+    bool? opaque,
   }) {
     print('FluroPlusNavigate.goto $path?arguments=${bundle?.toJson()}');
     FocusScope.of(context).requestFocus(FocusNode());
@@ -46,6 +55,9 @@ class FluroPlusNavigate {
       replace: replace,
       clearStack: clearStack,
       transition: transition,
+      transitionDuration: transitionDuration,
+      transitionBuilder: transitionBuilder,
+      opaque: opaque,
     )
         .then((value) {
       if (value == null) {

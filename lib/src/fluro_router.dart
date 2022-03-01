@@ -168,7 +168,8 @@ class FluroRouter {
     AppRoute? route = match?.route;
 
     if (route!.routeMiddleware != null) {
-      RouteSettings? redirectSettings = route.routeMiddleware!.redirect(path);
+      RouteSettings? redirectSettings =
+          route.routeMiddleware!.redirect(buildContext, path);
       if (redirectSettings != null) {
         settingsToUse = redirectSettings;
         path = settingsToUse.name;

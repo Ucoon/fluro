@@ -45,7 +45,7 @@ typedef Widget? HandlerFunc(
 ///路由中间件
 abstract class RouteMiddleware {
   int? priority;
-  RouteSettings? redirect(String route);
+  RouteSettings? redirect(BuildContext? context, String route);
 }
 
 /// A route that is added to the router tree.
